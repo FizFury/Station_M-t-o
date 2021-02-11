@@ -16,45 +16,14 @@ History:
 from machine import I2C, Pin
 from lcdi2c import LCDI2C
 from time import sleep
+from Lib import get_measures
+import ujson
 
-# Pyboard - SDA=Y10, SCL=Y9
-#i2c = I2C(2)
-# ESP8266 sous MicroPython
-i2c = I2C(-1, Pin(2), Pin(0))
-
-# Initialise l'ecran LCD
-lcd = LCDI2C( i2c, cols=16, rows=2 )
-lcd.backlight()
-
-# display a message (no automatic linefeed)
-lcd.print("Hello, from MicroPython !")
-sleep( 2 )
-# horizontal scrolling
-for i in range( 10 ):
-    lcd.scroll_display()
-    sleep( 0.500 )
-
-# backlight control
-for i in range( 3 ):
-    lcd.backlight(False)
-    sleep( 0.400 )
+while True:
+    i2c = I2C(Pin(0), Pin(2))
+    lcd = LCDI2C( i2c, cols=16, rows=2 )
     lcd.backlight()
-    sleep( 0.400 )
-
-# Clear screen
-lcd.clear()
-
-# Move the cursor + print
-lcd.set_cursor( (4, 1) ) # Tuple with Col=4, Row=1, zero based indexes
-lcd.print( '@' )
-# or do positionning+print with a single print() call
-lcd.print( '^', pos=(10,0) )
-lcd.print( '!', pos=(10,1) )
-sleep( 2 )
-
-# Clear screen
-lcd.clear()
-lcd.home()  # Cursor at home position
-lcd.cursor()
-lcd.blink() # Blinking cursor
-lcd.print( "Cursor:" )
+    lcd.clear()
+    data = str(get_measures())
+    lcd.print(data)
+    sleep( 2 )
