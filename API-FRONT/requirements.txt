@@ -1,0 +1,6 @@
+Flask
+#Flask-RestPlus
+# Replaced by flask-restx since depencies was broken
+Flask-restx
+PyMySQL
+gunicorn
